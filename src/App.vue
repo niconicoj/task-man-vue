@@ -21,6 +21,7 @@ import TaskList from "@/components/TaskList.vue";
 import AddTask from "@/components/AddTask.vue";
 import { ITask } from "@/lib/Task";
 import { apiFetch } from "@/lib/api";
+import { MutationTypes } from "@/store/mutation-types";
 
 export default defineComponent({
   name: "App",
@@ -29,65 +30,19 @@ export default defineComponent({
     TaskList,
     AddTask,
   },
-  data(): {
-    tasks: ITask[];
-    showAddTask: boolean;
-  } {
-    return {
-      tasks: [],
-      showAddTask: false,
-    };
+  computed: {
+    showAddTask() {
+      return this.$store.state.showAddTask;
+    },
   },
   methods: {
-    async deleteTask(id: string) {
-      const res = await apiFetch<ITask>(`api/tasks/${id}`, {
-        method: "DELETE",
-      });
-      this.tasks = this.tasks.filter((task) => task.id !== id);
-    },
-    async toggleReminder(id: string) {
-      const task = this.tasks.find((task) => task.id === id)!;
-      const res = await apiFetch<ITask>(`api/tasks/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          ...task,
-          reminder: !task.reminder,
-        }),
-      });
-      this.tasks = this.tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !task.reminder } : task
-      );
-    },
-    async toggleAddTask() {
-      this.showAddTask = !this.showAddTask;
-    },
-    async addTask(task: { text: string; day: string; reminder: boolean }) {
-      const res = await apiFetch<ITask>("api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-      this.tasks = [
-        ...this.tasks,
-        {
-          ...res,
-        },
-      ];
-    },
     async fetchTasks(): Promise<ITask[]> {
       return apiFetch("api/tasks");
     },
-    async fetchTask(id: number): Promise<ITask> {
-      return apiFetch(`api/tasks/${id}`);
-    },
   },
   async created() {
-    this.tasks = await this.fetchTasks();
+    let tasks = await this.fetchTasks();
+    this.$store.commit(MutationTypes.ADD_TASKS, tasks);
   },
 });
 </script>

@@ -1,15 +1,14 @@
 <template>
   <header>
     <h1>{{ title }}</h1>
-    <Button color="green" @click="$emit('toggle-add-task')">{{
-      buttonText
-    }}</Button>
+    <Button color="green" @click="toggleAddTask">{{ buttonText }}</Button>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import Button from "@/components/Button.vue";
+import { MutationTypes } from "@/store/mutation-types";
 
 export default defineComponent({
   name: "Header",
@@ -19,6 +18,11 @@ export default defineComponent({
   },
   components: {
     Button,
+  },
+  methods: {
+    toggleAddTask() {
+      this.$store.commit(MutationTypes.TOGGLE_ADD_TASK);
+    },
   },
 });
 </script>

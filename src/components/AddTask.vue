@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts">
+import { ActionTypes } from "@/store/action-types";
 import { defineComponent } from "vue";
 
 const initalState = {
@@ -47,9 +48,8 @@ export default defineComponent({
       if (!this.task.text || !this.task.day) {
         alert("Please add a task");
       }
-      this.$emit("add-task", this.task);
-      this.task = initalState;
       e.preventDefault();
+      this.$store.dispatch(ActionTypes.ADD_TASK, this.task);
     },
   },
 });
