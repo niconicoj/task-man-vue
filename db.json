@@ -7,10 +7,10 @@
       "reminder": true
     },
     {
-      "id": "3",
-      "text": "Food shopping",
-      "day": "March 7th at 2:00pm",
-      "reminder": false
+      "text": "hello",
+      "day": "there",
+      "reminder": false,
+      "id": "42miOE-"
     }
   ]
 }

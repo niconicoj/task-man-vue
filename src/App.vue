@@ -1,51 +1,9 @@
 <template>
   <div class="container">
-    <Header
-      @toggle-add-task="toggleAddTask"
-      title="Task Tracker"
-      :buttonText="showAddTask ? 'close' : 'Add Task'"
-    />
-    <AddTask v-show="showAddTask" @add-task="addTask" />
-    <TaskList
-      @toggle-reminder="toggleReminder"
-      @delete-task="deleteTask"
-      :tasks="tasks"
-    />
+    <router-view></router-view>
+    <Footer />
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
-import TaskList from "@/components/TaskList.vue";
-import AddTask from "@/components/AddTask.vue";
-import { ITask } from "@/lib/Task";
-import { apiFetch } from "@/lib/api";
-import { MutationTypes } from "@/store/mutation-types";
-
-export default defineComponent({
-  name: "App",
-  components: {
-    Header,
-    TaskList,
-    AddTask,
-  },
-  computed: {
-    showAddTask() {
-      return this.$store.state.showAddTask;
-    },
-  },
-  methods: {
-    async fetchTasks(): Promise<ITask[]> {
-      return apiFetch("api/tasks");
-    },
-  },
-  async created() {
-    let tasks = await this.fetchTasks();
-    this.$store.commit(MutationTypes.ADD_TASKS, tasks);
-  },
-});
-</script>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");

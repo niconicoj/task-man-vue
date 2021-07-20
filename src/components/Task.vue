@@ -1,11 +1,8 @@
 <template>
-  <div
-    @dblclick="$emit('toggle-reminder', task.id)"
-    :class="[task.reminder ? 'reminder' : '', 'task']"
-  >
+  <div @dblclick="onToggle" :class="[task.reminder ? 'reminder' : '', 'task']">
     <h3>
       {{ task.text }}
-      <i @click="$emit('delete-task', task.id)" class="fas fa-times"></i>
+      <i @click="onDelete" class="fas fa-times"></i>
     </h3>
     <p>{{ task.day }}</p>
   </div>
@@ -13,6 +10,7 @@
 
 <script lang="ts">
 import { ITask } from "@/lib/Task";
+import { ActionTypes } from "@/store/action-types";
 import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
@@ -23,8 +21,11 @@ export default defineComponent({
     },
   },
   methods: {
-    onDelete(id: number) {
-      this.$emit("delete-task", id);
+    onDelete(id: string) {
+      this.$store.dispatch(ActionTypes.DELETE_TASK, this.task!.id);
+    },
+    onToggle(id: string) {
+      this.$store.dispatch(ActionTypes.TOGGLE_REMINDER, this.task!.id);
     },
   },
 });

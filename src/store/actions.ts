@@ -22,6 +22,10 @@ export interface Actions {
     {commit}: AugmentedActionContext,
     payload: string
   ): void
+  [ActionTypes.TOGGLE_REMINDER](
+    {commit}: AugmentedActionContext,
+    payload: string
+  ): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {

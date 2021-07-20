@@ -15,14 +15,13 @@ import Task from "@/components/Task.vue";
 
 export default defineComponent({
   name: "TaskList",
-  props: {
-    tasks: {
-      type: Object as PropType<ITask[]>,
+  computed: {
+    tasks(): ITask[] {
+      return this.$store.state.tasks;
     },
   },
   components: {
     Task,
   },
-  emits: ["delete-task", "toggle-reminder"],
 });
 </script>
